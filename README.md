@@ -4,4 +4,8 @@
 <table>
 	<tr>3.1</tr>
 	<tr>算法入门</tr>
+	<tr>3.2</tr>
+	<tr>查找元素</tr>
+	<tr>3.2</tr>
+	<tr>图形化输出</tr>
 </table>
