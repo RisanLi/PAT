@@ -5,7 +5,6 @@ using namespace std;
 int prime[1000100],primeNum = 0;
 bool p[1000100] = {0};
 void primeTable(int x){
-	int sqr = (int) sqrt (1.0 * x);
 	for (int i = 2; i < 1000000; i++){
 		if (p[i] == false){
 			prime[primeNum++] = i;
@@ -32,8 +31,13 @@ int main(){
 	}
 	primeTable(n);
 	int fi = n;
-	int sqr = (int) sqrt(1.0 * n);
+	int sqr = (int) sqrt(n);
 	for (int i = 0; prime[i] <= sqr ; i++){
+		//数论中的定理:一个数的质因子① 要么全部小于等于sqrt(n)
+		//			   ② 要么只有一个大于sqrt(n)，
+		//			   而这个大于sqrt(n)的质因子，
+		//			   一定是被前面的因子除后剩余的 不能被[2,sqrt(n)]任意
+		//			   数整除的质数
 		if (n % prime[i] == 0){
 			factor[facNum].fac = prime[i];
 			factor[facNum].cnt = 0;
@@ -44,6 +48,7 @@ int main(){
 			facNum++;
 		}
 	}
+	//第② 种情况
 	if (n != 1){
 		factor[facNum].fac = n;
 		factor[facNum].cnt = 1;
