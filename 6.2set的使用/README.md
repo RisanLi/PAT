@@ -29,7 +29,9 @@
 	struct Node {	//我们决定对Node按照id去重，按hot排序，hot相同的按id排序
 		int id;
 		int hot;
-		bool operator<(const Node &temp){
+		//这种重载方法 有点难以理解，可以采用另外的方式
+		结尾必须跟 const
+		bool operator<(const Node &temp) const{
 			if (temp.id == this.id) return false;	//id相同的不加入set
 			else{
 				if (temp.hot != this.hot) return temp.hot < this.hot;
@@ -38,5 +40,15 @@
 
 			}
 		}
+		//于 sort中cmp函数更加接近的写法 注意结构体中 重载函数前要加上friend
+		friend bool operator <(const Node &a,const Node &b){
+				if (a.id == b,id) return false;
+				else{
+					if (a.hot != b.hot)  return a.hot < b.hot;
+					else 
+						return a.id < b.id;
+				}
+
+			}
 	};
 
