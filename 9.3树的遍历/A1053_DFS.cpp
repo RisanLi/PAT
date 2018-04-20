@@ -1,14 +1,12 @@
 #include <cstdio>
 #include <vector>
 #include <cstring>
-#include <queue>
 #include <algorithm>
 
 using namespace std;
 struct Node{
 	int weight;
 	vector<int> children;
-	int distance;	//路径和
 } node[110];
 vector<vector<int> > paths;
 int N, M, S;
@@ -16,19 +14,26 @@ int N, M, S;
 int sum = 0;
 vector<int> p;
 bool isLeaf[110];
-void BFS(int root){
-	node[root].distance = 10;
-	queue<int> q;
-	q.push(root);
-	while(!q.empty()){
-		int temp = q.front();
-		q.pop();
-		for (int i : node[temp].children){
-			node[i].distance = node[i].weight + node[temp].distance;
-			q.push(i);
-		}
+void DFS(int root){
+	if (sum > S)	//剪枝
+		return;
+	//访问节点
+	sum += node[root].weight;
+	p.push_back(root);
+	//访问孩子节点
+	for (int i : node[root].children){
+		DFS(i);
+		p.pop_back();
+		sum -= node[i].weight;
+	}
+	if (sum == S && isLeaf[p.back()]){	//边界
+		paths.push_back(p);
+	//	sum -= node[p.back()].weight;
+	//	p.pop_back();
+		return;
 	}
 }
+
 bool cmp(vector<int> a, vector<int> b){
 	int m = min(a.size(),b.size());
 	for (int i = 0; i < m; i++){
@@ -56,10 +61,17 @@ int main(){
 			node[id].children.push_back(c);
 		}
 	}
-	BFS(0);
-	for (int i = 0; i < N; i++){
-		if (node[i].distance == S && isLeaf[i])
-			printf ("%d\n",i);
+	DFS(0);
+	sort(paths.begin(),paths.end(),cmp);
+	for (vector<int> i : paths){
+		int var = 0;
+		for (int j : i){
+			if (var++ != 0)
+				printf (" ");
+			printf ("%d", node[j].weight);
+		}
+		printf ("\n");
 	}
 	return 0;
 }
+
